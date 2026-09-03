@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@theme {
+  /*
+   * A light architectural concrete ground, not another dark studio night —
+   * the last two sites in this series both ran dark warm charcoal, and
+   * Goda's own floor and wall panels are a genuinely cool, neutral grey
+   * concrete in daylight, not the terracotta-and-timber warmth those two
+   * dealers actually own. The one warm note is the ring light itself: a
+   * russet housing kept to accents and the fixture, a warm glow kept to
+   * fills, never a whole surface.
+   */
+  --color-ground: #e6e4e1; /* their polished concrete, lifted to a page */
+  --color-ground-2: #d8d5d0; /* raised card */
+  --color-ground-3: #c7c2bb; /* rules only — never text */
+  --color-ink: #1b1918; /* 13.8:1 on ground */
+  --color-ink-2: #4e4a46; /* 6.9:1 on ground */
+  --color-ink-3: #5c5751; /* 5.6:1 on ground — the faintest text allowed */
+  --color-ring: #8a2a19; /* the pendant's russet housing: 6.8:1 on ground */
+  --color-glow: #f2b37a; /* the fixture's warm light — fills only */
+
+  --font-display: var(--font-big-shoulders), "Helvetica Neue", sans-serif;
+  --font-body: var(--font-albert-sans), system-ui, sans-serif;
+  --font-arabic-display: var(--font-noto-kufi), "Segoe UI", sans-serif;
+  --font-arabic-body: var(--font-vazirmatn), system-ui, sans-serif;
+
+  --text-hero: clamp(2rem, 5vw, 4rem);
+  --text-display: clamp(1.5rem, 3vw, 2.4rem);
+  --text-lead: clamp(0.98rem, 1.1vw, 1.12rem);
+
+  /* A line is said, not slid into place. */
+  --ease-said: cubic-bezier(0.22, 0.85, 0.28, 1);
+}
+
+@layer base {
+  section[id] { scroll-margin-top: 5.5rem; }
+
+  html {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: auto;
+  }
+
+  body { font-family: var(--font-body); overflow-x: hidden; }
+  html[dir="rtl"] body { font-family: var(--font-arabic-body); }
+
+  ::selection { background: var(--color-glow); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility font-display { font-family: var(--font-display); }
+html[dir="rtl"] .font-display { font-family: var(--font-arabic-display); }
+
+@utility label {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+html[dir="rtl"] .label {
+  font-family: var(--font-arabic-body);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.82rem;
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Their own opening line, set apart from the specification that follows. */
+@utility said {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+}
+html[dir="rtl"] .said { font-family: var(--font-arabic-display); font-style: normal; }
+
+/* ---------------------------------------------------------------------------
+ * Motion signature: said.
+ *
+ * Their captions say a line before they state a fact, so content here
+ * arrives the same way speech does — a slight upward settle with a soft
+ * blur that resolves, as if the words were just finished being said, rather
+ * than sliding or fading in from nothing.
+ * ------------------------------------------------------------------------ */
+
+@keyframes said-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes rule-said { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes said-in { from { opacity: 1; transform: none; filter: none; } to { opacity: 1; transform: none; filter: none; } }
+  @keyframes rule-said { from { transform: none; } to { transform: none; } }
+}
+
+[data-said] { opacity: 0; }
+[data-said][data-seen] {
+  animation: said-in 620ms var(--ease-said) var(--said-delay, 0ms) both;
+}
+[data-said-rule] { transform: scaleX(0); }
+[data-said-rule][data-seen] {
+  animation: rule-said 480ms var(--ease-said) var(--said-delay, 0ms) both;
+}
+
+/* ---------------------------------------------------------------------------
+ * Arabic corrections. Keyed off [dir], never [lang] — browser translation
+ * rewrites lang. Unlayered so they outrank Tailwind utilities.
+ * ------------------------------------------------------------------------ */
+
+html[dir="ltr"] .text-hero { line-height: 1.05; }
+html[dir="rtl"] .text-hero {
+  font-size: clamp(1.9rem, 5vw, 3.8rem);
+  line-height: 1.55;
+}
+html[dir="ltr"] .text-display { line-height: 1.1; }
+html[dir="rtl"] .text-display {
+  font-size: clamp(1.55rem, 3.1vw, 2.35rem);
+  line-height: 1.5;
+}
+
+html[dir="rtl"] [class*="tracking-["],
+html[dir="rtl"] .tracking-widest,
+html[dir="rtl"] .tracking-wider { letter-spacing: 0; }
+
+.fine { font-size: 0.78rem; line-height: 1.6; }
+html[dir="rtl"] .fine { font-size: 0.84rem; line-height: 1.8; }
+
+html[dir="rtl"] .text-lead { font-size: clamp(1.02rem, 1.15vw, 1.16rem); line-height: 1.95; }
+
+/* Marque names, model codes, mileage and phone numbers stay Latin and LTR
+   inside Arabic copy — "60,000 km" must not reorder its digits. */
+.latin {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--font-body);
+}
+html[dir="rtl"] .latin { text-align: right; }

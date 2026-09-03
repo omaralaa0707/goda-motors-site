@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!--
+    A redraw, not their file: the suspended ring light above every one of
+    their photographs, on its cable.
+  -->
+  <path d="M24 5v10" stroke="#1b1918" stroke-width="1.6"/>
+  <circle cx="24" cy="27" r="12" stroke="#8a2a19" stroke-width="3"/>
+  <circle cx="24" cy="27" r="12" stroke="#f2b37a" stroke-width="1" stroke-dasharray="58 20" stroke-linecap="round"/>
+</svg>
